@@ -1,0 +1,10 @@
+2011-12-23  Krzysztof Kowalik  <chris@nu7hat.ch>
+
+	* CMakeLists.txt: added cmake configuration
+	* src/astronaut.c: thread safety stuff, tasks listener
+	* include/astronaut.h: created header file
+	* deps/czmq: added czmq library to dependencies
+
+2011-12-22  Krzysztof Kowalik  <chris@nu7hat.ch>
+
+	* astronaut.c: dummy version of the client

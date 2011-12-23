@@ -1,0 +1,3 @@
+[submodule "deps/czmq"]
+	path = deps/czmq
+	url = https://github.com/zeromq/czmq.git
