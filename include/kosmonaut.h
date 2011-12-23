@@ -1,14 +1,14 @@
-#ifndef _ASTRONAUT_H_
-#define _ASTRONAUT_H_
+#ifndef _KOSMONAUT_H_
+#define _KOSMONAUT_H_
 
 #include <pthread.h>
 
 #define E_RUNNING 101
 
 /**
- * Astronaut representation structure.
+ * Kosmonaut representation structure.
  */
-typedef struct astronaut_t {
+typedef struct kosmonaut_t {
 	zctx_t* ctx;
 	void* req;
 	void* dlr;
@@ -16,56 +16,56 @@ typedef struct astronaut_t {
 	short int running;
 	pthread_mutex_t lmtx; // listener mutex
 	pthread_mutex_t tmtx; // trigger mutex
-} astronaut_t;
+} kosmonaut_t;
 
 /**
  * Listener's callback function type. 
  */
-typedef void(*astronaut_listener_t)(astronaut_t*, char*);
+typedef void(*kosmonaut_listener_t)(kosmonaut_t*, char*);
 
 /**
- * Astronaut constructor.
- * Creates new instance of the `astronaut_t` and initializes it's
- * internal sockets. The `astronaut_t` contains 2 kind of sockets:
+ * Kosmonaut constructor.
+ * Creates new instance of the `kosmonaut_t` and initializes it's
+ * internal sockets. The `kosmonaut_t` contains 2 kind of sockets:
  *
  * - ZMQ_REQ: handles authentication and tasks triggering
  * - ZMQ_DEALER: handles incoming tasks
  *
- * Memory allocated by `astronaut_new` have to be freed using the
- * `astronaut_destroy` function.
+ * Memory allocated by `kosmonaut_new` have to be freed using the
+ * `kosmonaut_destroy` function.
  *
- * @see astronaut_destroy
- * @see astronaut_connect
+ * @see kosmonaut_destroy
+ * @see kosmonaut_connect
  *
  * @param addr   the server URI address
  * @param vhost  vhost to connect to
  * @param secret secret key assigned to given vhost
- * @return Configured astronaut instance
+ * @return Configured kosmonaut instance
  */
-astronaut_t* astronaut_new(const char* addr, const char* vhost, const char* secret);
+kosmonaut_t* kosmonaut_new(const char* addr, const char* vhost, const char* secret);
 
 /**
- * Astronaut destructor.
+ * Kosmonaut destructor.
  * Stops event loops, disconnects the sockets and cleans up the context.
  * Frees all allocated memory as well.
  *
- * @param self_p memory address of an astronaut instance.
+ * @param self_p memory address of an kosmonaut instance.
  */
-void astronaut_destroy(astronaut_t** self_p);
+void kosmonaut_destroy(kosmonaut_t** self_p);
 
 /**
  * The REQ socket connector.
  * Establishes connection for the REQ socket only. To establish
- * connection for the DEALER the `astronaut_listen` function needs
+ * connection for the DEALER the `kosmonaut_listen` function needs
  * to be used.
  *
- * @see astronaut_listen
+ * @see kosmonaut_listen
  *
- * @param self an astronaut instance
+ * @param self an kosmonaut instance
  * @param uri  the URI to connect to
  * @return 0 if OK, otherwise appropriate error code
  */
-int astronaut_connect(astronaut_t* self);
+int kosmonaut_connect(kosmonaut_t* self);
 
 /**
  * Request for signle access token.
@@ -77,41 +77,41 @@ int astronaut_connect(astronaut_t* self);
  * which means each token can be used to access only those channels
  * matching the permission regexp.
  *
- * @param self an astronaut instance
+ * @param self an kosmonaut instance
  * @param perm permission regexp
  * @return a single access token string
  */
-char* astronaut_get_single_access_token(astronaut_t* self, const char* perm);
+char* kosmonaut_get_single_access_token(kosmonaut_t* self, const char* perm);
 
 /**
  * Trigger an WebRocket operation.
  * Sends trigger message to the WebRocket backend and waits for
  * confirmation.
  *
- * @param self an astronaut instance
+ * @param self an kosmonaut instance
  * @param data serialized data with trigger command (JSON-encoded string)
  * @return 0 if OK, otherwise appropriate error code
  */
-int astronaut_trigger(astronaut_t* self, char* data);
+int kosmonaut_trigger(kosmonaut_t* self, char* data);
 
 /**
  * Starts the listener's event loop.
  * Establishes the DEALER connection and starts listener event loop for
  * it. Listener can't be activated more than once.
  *
- * @param self     an astronaut instance
+ * @param self     an kosmonaut instance
  * @param callback callback function called when a message is received.
  * @return 0 if OK, otherwise appropriate error code
  */
-int astronaut_listen(astronaut_t* self, astronaut_listener_t callback);
+int kosmonaut_listen(kosmonaut_t* self, kosmonaut_listener_t callback);
 
 /**
  * Stops the listener.
  * If a listener's event loop is running, then stops it and cleans up
  * its status.
  *
- * @param self an astronaut instance
+ * @param self an kosmonaut instance
  */
-void astronaut_stop_listening(astronaut_t* self);
+void kosmonaut_stop_listening(kosmonaut_t* self);
 
-#endif /* _ASTRONAUT_H_ */
+#endif /* _KOSMONAUT_H_ */

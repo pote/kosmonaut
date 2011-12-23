@@ -1,7 +1,7 @@
-Astronaut - The WebRocket client toolkit
+Kosmonaut - The WebRocket client toolkit
 ========================================
 
-The 'astronaut' library is a toolkit to build efficient clients for
+The 'kosmonaut' library is a toolkit to build efficient clients for
 the WebRocket link:http://rfc.webrocket.io/draft/BWP.html[*Backend
 Workers Protocol*].
 
@@ -12,17 +12,17 @@ IMPORTANT: This is not a full stack client, it's just a low level
 Installation
 ------------
 The file 'INSTALL' in this directory says how to build and install 
-Astronaut on various systems, once you have unpacked or checked out the
-entire Astronaut's file tree.
+Kosmonaut on various systems, once you have unpacked or checked out the
+entire Kosmonaut's file tree.
 
 Release history
 ---------------
 See the file 'NEWS' for information on new features and other user-visible
-changes in recent versions of Astronaut.
+changes in recent versions of Kosmonaut.
 
 Contributing
 ------------
-We appreciate any kind of help in Astronaut development and testing.
+We appreciate any kind of help in Kosmonaut development and testing.
 If you don't know how can you help us, please check the project's
 issues or 'TODO' file in project root directory. Before you start
 working on the code, and before you send us a pull request, make sure

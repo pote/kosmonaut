@@ -4,7 +4,7 @@
 #include <string.h>
 #include <unistd.h>
 
-#include "astronaut.h"
+#include "kosmonaut.h"
 
 #define SA_TOKEN_LEN 128
 #define UUID_LEN 36
@@ -13,15 +13,15 @@
 #define RESPONSE_TIMEOUT 5000
 #define LISTENER_TIMEOUT 1000
 
-astronaut_t* astronaut_new(const char* addr, const char *vhost, const char *secret)
+kosmonaut_t* kosmonaut_new(const char* addr, const char *vhost, const char *secret)
 {
-	astronaut_t* self;
+	kosmonaut_t* self;
 	uuid_t uuid;
 	int addr_len = strlen(addr);
 	char* sid = (char*)malloc(UUID_LEN * sizeof(char));
 	char identity[strlen(addr) + strlen(vhost) + strlen(secret) + 3 + 3];
   
-	self = (astronaut_t*)malloc(sizeof(astronaut_t));
+	self = (kosmonaut_t*)malloc(sizeof(kosmonaut_t));
 	if (!self)
 		return NULL;
 
@@ -52,14 +52,14 @@ astronaut_t* astronaut_new(const char* addr, const char *vhost, const char *secr
 	return self;
 }
 
-void astronaut_destroy(astronaut_t** self_p)
+void kosmonaut_destroy(kosmonaut_t** self_p)
 {
 	if (!*self_p)
 		return;
   
-	astronaut_t* self = *self_p;
+	kosmonaut_t* self = *self_p;
   
-	astronaut_stop_listening(self);
+	kosmonaut_stop_listening(self);
 	zctx_destroy(&self->ctx);
 	pthread_mutex_destroy(&self->lmtx);
 	pthread_mutex_destroy(&self->tmtx);
@@ -67,12 +67,12 @@ void astronaut_destroy(astronaut_t** self_p)
 	*self_p = NULL;
 }
 
-int astronaut_connect(astronaut_t* self)
+int kosmonaut_connect(kosmonaut_t* self)
 {
 	return zsocket_connect(self->req, self->addr);
 }
 
-zmsg_t* astronaut_request(astronaut_t* self, char* request)
+zmsg_t* kosmonaut_request(kosmonaut_t* self, char* request)
 {
 	if (!request || !self)
 		return NULL;
@@ -99,7 +99,7 @@ zmsg_t* astronaut_request(astronaut_t* self, char* request)
 	return res;
 }
 
-char* astronaut_get_single_access_token(astronaut_t* self, const char* perm)
+char* kosmonaut_get_single_access_token(kosmonaut_t* self, const char* perm)
 {
 	if (!perm || !self)
 		return NULL;
@@ -109,7 +109,7 @@ char* astronaut_get_single_access_token(astronaut_t* self, const char* perm)
 	char* cmd = (char*)malloc((strlen(perm) + CMD_LEN) * sizeof(char));
 
 	sprintf(cmd, "SAT %s", perm);
-	res = astronaut_request(self, cmd);
+	res = kosmonaut_request(self, cmd);
 
 	if (!res)
 		return NULL;
@@ -120,7 +120,7 @@ char* astronaut_get_single_access_token(astronaut_t* self, const char* perm)
 	return token;
 }
 
-int astronaut_trigger(astronaut_t* self, char* data)
+int kosmonaut_trigger(kosmonaut_t* self, char* data)
 {
 	if (!data || !self)
 		return -1;
@@ -131,7 +131,7 @@ int astronaut_trigger(astronaut_t* self, char* data)
 	char* payload = (char*)malloc((strlen(data) + CMD_LEN) * sizeof(char));
 
 	sprintf(payload, "TRG %s", data);
-	res = astronaut_request(self, data);
+	res = kosmonaut_request(self, data);
 
 	if (!res)
 		return -1;
@@ -141,7 +141,7 @@ int astronaut_trigger(astronaut_t* self, char* data)
 	return rc;
 }
 
-int astronaut_listen(astronaut_t* self, astronaut_listener_t callback)
+int kosmonaut_listen(kosmonaut_t* self, kosmonaut_listener_t callback)
 {
 	if (!self)
 		return -1;
@@ -179,7 +179,7 @@ int astronaut_listen(astronaut_t* self, astronaut_listener_t callback)
 	return 0;
 }
 
-void astronaut_stop_listening(astronaut_t* self)
+void kosmonaut_stop_listening(kosmonaut_t* self)
 {
 	if (!self || self->running < 1)
 		return;
