@@ -6,10 +6,6 @@
 
 #include "astronaut.h"
 
-#define MAX_VHOST_LEN 24
-#define SECRET_LEN 32
-#define SID_LEN 32
-#define MAX_IDENTITY_LEN 4 + MAX_VHOST_LEN + SECRET_LEN + SID_LEN
 #define SA_TOKEN_LEN 128
 #define UUID_LEN 36
 #define CMD_LEN 4
@@ -23,7 +19,7 @@ astronaut_t* astronaut_new(const char* addr, const char *vhost, const char *secr
 	uuid_t uuid;
 	int addr_len = strlen(addr);
 	char* sid = (char*)malloc(UUID_LEN * sizeof(char));
-	char identity[MAX_IDENTITY_LEN];
+	char identity[strlen(addr) + strlen(vhost) + strlen(secret) + 3 + 3];
   
 	self = (astronaut_t*)malloc(sizeof(astronaut_t));
 	if (!self)
