@@ -6,13 +6,13 @@
 #define E_RUNNING 101
 
 typedef struct astronaut_t {
-  zctx_t* ctx;
-  void* req;
-  void* dlr;
-  char* addr;
-  short int running;
-  pthread_mutex_t lmtx; // listener mutex
-  pthread_mutex_t tmtx; // trigger mutex
+	zctx_t* ctx;
+	void* req;
+	void* dlr;
+	char* addr;
+	short int running;
+	pthread_mutex_t lmtx; // listener mutex
+	pthread_mutex_t tmtx; // trigger mutex
 } astronaut_t;
 
 typedef void(*astronaut_listener_t)(astronaut_t*, char*);
