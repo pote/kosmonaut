@@ -56,6 +56,21 @@ astronaut_t* astronaut_new(const char* addr, const char *vhost, const char *secr
 	return self;
 }
 
+void astronaut_destroy(astronaut_t** self_p)
+{
+	if (!*self_p)
+		return;
+  
+	astronaut_t* self = *self_p;
+  
+	astronaut_stop_listening(self);
+	zctx_destroy(&self->ctx);
+	pthread_mutex_destroy(&self->lmtx);
+	pthread_mutex_destroy(&self->tmtx);
+	free(self);
+	*self_p = NULL;
+}
+
 int astronaut_connect(astronaut_t* self)
 {
 	return zsocket_connect(self->req, self->addr);
@@ -130,7 +145,7 @@ int astronaut_trigger(astronaut_t* self, char* data)
 	return rc;
 }
 
-int astronaut_listen(astronaut_t* self, astronaut_listener_t listener)
+int astronaut_listen(astronaut_t* self, astronaut_listener_t callback)
 {
 	if (!self)
 		return -1;
@@ -159,7 +174,7 @@ int astronaut_listen(astronaut_t* self, astronaut_listener_t listener)
 		if (items[0].revents & ZMQ_POLLIN) {
 			res = zmsg_recv(self->req);
 			payload = zmsg_popstr(res);
-			listener(self, payload);
+			callback(self, payload);
 		}
 	}
 
@@ -170,7 +185,7 @@ int astronaut_listen(astronaut_t* self, astronaut_listener_t listener)
 
 void astronaut_stop_listening(astronaut_t* self)
 {
-	if (self->running < 1)
+	if (!self || self->running < 1)
 		return;
   
 	pthread_mutex_lock(&self->lmtx);
@@ -178,19 +193,4 @@ void astronaut_stop_listening(astronaut_t* self)
 	while (self->running != -1)
 		usleep(1000);
 	pthread_mutex_unlock(&self->lmtx);
-}
-
-void astronaut_destroy(astronaut_t** self_p)
-{
-	if (!*self_p)
-		return;
-  
-	astronaut_t* self = *self_p;
-  
-	astronaut_stop_listening(self);
-	zctx_destroy(&self->ctx);
-	pthread_mutex_destroy(&self->lmtx);
-	pthread_mutex_destroy(&self->tmtx);
-	free(self);
-	*self_p = NULL;
 }
