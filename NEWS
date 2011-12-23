@@ -1,0 +1,7 @@
+Release history
+===============
+
+v0.0.1
+------
+* Client library implementing the WebRocket's Backend Worker Protocol
+  low level interface.

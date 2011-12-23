@@ -1,0 +1,47 @@
+Astronaut - The WebRocket client toolkit
+========================================
+
+The 'astronaut' library is a toolkit to build efficient clients for
+the WebRocket link:http://rfc.webrocket.io/draft/BWP.html[*Backend
+Workers Protocol*].
+
+IMPORTANT: This is not a full stack client, it's just a low level
+	framework which helps to build clients in other programming
+	languages without dealing with ZeroMQ magic and quirks.
+
+Installation
+------------
+The file 'INSTALL' in this directory says how to build and install 
+Astronaut on various systems, once you have unpacked or checked out the
+entire Astronaut's file tree.
+
+Release history
+---------------
+See the file 'NEWS' for information on new features and other user-visible
+changes in recent versions of Astronaut.
+
+Contributing
+------------
+We appreciate any kind of help in Astronaut development and testing.
+If you don't know how can you help us, please check the project's
+issues or 'TODO' file in project root directory. Before you start
+working on the code, and before you send us a pull request, make sure
+you understand and follow the contributors guide, which you can find
+in the 'CONTRIBUTE' file.
+
+Copyright
+---------
+Copyright (C) 2011 by Krzysztof Kowalik <chris@nu7hat.ch>
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program. If not, see <http://www.gnu.org/licenses/>.
