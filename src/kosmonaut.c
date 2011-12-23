@@ -78,13 +78,14 @@ zmsg_t* kosmonaut_request(kosmonaut_t* self, char* request)
 		return NULL;
 
 	zmq_pollitem_t items[] = {{self->req, 0, ZMQ_POLLOUT|ZMQ_POLLIN, 0}};
-	zmsg_t *res = NULL, *req = NULL;
+	zmsg_t* res = NULL;
+	zmsg_t* req = NULL;
 
 	pthread_mutex_lock(&self->tmtx);
 
 	int rc = zmq_poll(items, 1, REQUEST_TIMEOUT * ZMQ_POLL_MSEC);
 	if (rc == 0 && items[0].revents & ZMQ_POLLOUT) {
-		zmsg_t *req = zmsg_new();
+		req = zmsg_new();
 		zmsg_addstr(req, request);
 		zmsg_send(&req, self->req);
 		zmsg_destroy(&req);
@@ -152,8 +153,9 @@ int kosmonaut_listen(kosmonaut_t* self, kosmonaut_listener_t callback)
 	if (rc != 0)
 		return rc;
 
-	char* payload = NULL;
 	zmsg_t* res = NULL;
+	zmsg_t* hbt = NULL;
+	char* payload = NULL;
 	zmq_pollitem_t items[] = {{self->req, 0, ZMQ_POLLIN, 0}};
 
 	self->running = 1; // running
@@ -170,12 +172,24 @@ int kosmonaut_listen(kosmonaut_t* self, kosmonaut_listener_t callback)
 		if (items[0].revents & ZMQ_POLLIN) {
 			res = zmsg_recv(self->req);
 			payload = zmsg_popstr(res);
-			callback(self, payload);
+			
+			if (strncmp(payload, "HBT", 3) == 0) {
+				// Handle heartbeat
+				if (!hbt) {
+					hbt = zmsg_new();
+					zmsg_addstr(hbt, self->req);
+				}
+				zmsg_send(&hbt, self->req);
+			} else {
+				// Process receieved message in the callback
+				callback(self, payload);
+			}
 		}
 	}
 
 	self->running = -1; // stopped
 	zmsg_destroy(&res);
+	zmsg_destroy(&hbt);
 	return 0;
 }
 
