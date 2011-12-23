@@ -1,0 +1,19 @@
+Installation
+============
+
+The Astronaut build tools provides very simple and straightforward way
+to compile and install the package. The only thing you have to do is
+to download the source or clone the repository and run `make` command:
+
+   $ git clone git://github.com/webrocket/astronaut.git
+   $ cd astronaut
+   $ make
+
+If everything will go properly, then you should find a static library
+in the `./build` directory.
+
+Usage
+-----
+To use the Astronaut toolkit in building your full stack WebRocket's
+*Backend Worker Protocol* client, check the documentation and manual
+entries for 'astronaut(3)'.
