@@ -7,6 +7,7 @@ to download the source or clone the repository and run `make` command:
 
    $ git clone git://github.com/webrocket/kosmonaut.git
    $ cd kosmonaut
+   $ git submodule init && git submodule update
    $ make
 
 If everything will go properly, then you should find a static library
