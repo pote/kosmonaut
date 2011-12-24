@@ -77,6 +77,8 @@ int kosmonaut_connect(kosmonaut_t* self);
  * which means each token can be used to access only those channels
  * matching the permission regexp.
  *
+ * The memory of returned access token have to be freed by the user.
+ * 
  * @param self an kosmonaut instance
  * @param perm permission regexp
  * @return a single access token string
@@ -98,6 +100,9 @@ int kosmonaut_trigger(kosmonaut_t* self, char* data);
  * Starts the listener's event loop.
  * Establishes the DEALER connection and starts listener event loop for
  * it. Listener can't be activated more than once.
+ *
+ * The memory of the message data passed to the callback have to be
+ * freed by the user.
  *
  * @param self     an kosmonaut instance
  * @param callback callback function called when a message is received.
