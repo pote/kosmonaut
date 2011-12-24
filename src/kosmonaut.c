@@ -177,7 +177,7 @@ int kosmonaut_listen(kosmonaut_t* self, kosmonaut_listener_t callback)
 				// Handle heartbeat
 				if (!hbt) {
 					hbt = zmsg_new();
-					zmsg_addstr(hbt, self->req);
+					zmsg_addstr(hbt, "HBT");
 				}
 				zmsg_send(&hbt, self->req);
 			} else {
